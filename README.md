@@ -26,3 +26,85 @@ The JSON created should be stringified, and then encoded into Base64 format (uni
 `https://app.joinswytchboard.com/start/{entryPointId}?sbclid={encodedUserData}`.
 
 A precaution should be taken care about the size of the sbclid param, which will depend on the size of original JSON request object. Most relevant is the intro_message parameter which if provided then should be limited in size, to prevent max URL limits in the browser.
+
+## Checking if entry point is open/active
+
+Endpoint to check if the entry point is active:
+`GET https://app.joinswytchboard.com/api/public/company_services/:entryPointId/available`
+
+The entry point ID is the same one we use when we share the public entry point link as this
+`https://app.joinswytchboard.com/start/:entryPointId`.
+
+Expected response:
+```json
+{
+    "available": (boolean) true | false
+}
+```
+
+At least one punched-in user will mark the entry point as available.
+
+Besides this, another helpful resource is the entry point config endpoint.
+Usage: 
+`GET https://app.joinswytchboard.com/api/public/company_services/:entryPointId`
+
+Calling this endpoint will return you the config info for the requested entry point in the format:
+```json
+{
+    "name": "(string) Endpoint name",
+    "uid": "string",
+    "project_uid": "string",
+    "config": {
+        "id": number,
+        "visual": {
+            "logo1": "(string) url",
+            "logo2": "(string) url",
+            "accent_color": "string"
+        },
+        "text_chat": {
+            "enabled": boolean,
+            "button_text": "string",
+            "away_message": "string",
+            "welcome_message": "string"
+        },
+        "video_chat": {
+            "enabled": boolean,
+            "button_text": "string"
+        },
+        "landing_page": {
+            "website": "(string) url",
+            "away_message": "string",
+            "introduction": "string",
+            "call_to_action_text": "string"
+        },
+        "personal_page": {
+            "name_enabled": boolean,
+            "email_enabled": boolean,
+            "phone_enabled": boolean,
+            "request_help_enabled": boolean
+        },
+        "queue": {
+            "queue_message": "string"
+        },
+        "ratings": {
+            "enabled": boolean,
+            "message": "string",
+            "allow_comments": boolean
+        },
+        "thankyou_page": {
+            "enabled": boolean,
+            "message": "string"
+        },
+        "company_service_id": number,
+        "created_at": "(string) iso date",
+        "updated_at": "(string) iso date",
+        "routing": {
+            "thankyou_page_close_link": {
+                "link": "string",
+                "label": "string",
+                "enabled": boolean
+            }
+        }
+    }
+}
+```
